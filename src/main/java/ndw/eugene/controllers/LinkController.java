@@ -1,8 +1,8 @@
-package ndw.eugene.Controllers;
+package ndw.eugene.controllers;
 
-import ndw.eugene.Model.OriginalLink;
-import ndw.eugene.Services.LinkService;
-import ndw.eugene.Model.ShortLink;
+import ndw.eugene.model.OriginalLink;
+import ndw.eugene.services.LinkService;
+import ndw.eugene.model.ShortLink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

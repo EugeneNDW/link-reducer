@@ -1,4 +1,4 @@
-package ndw.eugene.Model;
+package ndw.eugene.model;
 
 public class OriginalLink {
 
@@ -18,5 +18,4 @@ public class OriginalLink {
     public void setOriginal(String originalLink) {
         this.original = originalLink;
     }
-
 }

@@ -1,4 +1,4 @@
-package ndw.eugene.Model;
+package ndw.eugene.model;
 
 public class ShortLink {
 

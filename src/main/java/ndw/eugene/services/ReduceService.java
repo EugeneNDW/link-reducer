@@ -1,4 +1,4 @@
-package ndw.eugene.Services;
+package ndw.eugene.services;
 
 
 import org.springframework.stereotype.Service;
