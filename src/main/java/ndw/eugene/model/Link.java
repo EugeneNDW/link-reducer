@@ -1,6 +1,7 @@
 package ndw.eugene.model;
 
 public class Link {
+
     private ShortLink link;
     private OriginalLink original;
     private Statistics stat;
@@ -30,15 +31,21 @@ public class Link {
         return stat;
     }
 
-    public void countRedirect(){
-        stat.increase();
-    }
-
     public int getRank() {
         return rank;
     }
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    public int getViews() {
+        return stat.getCounter();
+    }
+
+    public void countRedirect(){
+
+        stat.increase();
+
     }
 }

@@ -20,4 +20,5 @@ public class Statistics {
     public String toString() {
         return "counter = " + counter;
     }
+
 }

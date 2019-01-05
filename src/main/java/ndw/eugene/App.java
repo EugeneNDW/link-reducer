@@ -5,7 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class App {
+
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
+    //todo проверить собираемость в jar, собирается
+    //todo написать readme
+    //todo спросить про Mockito в чате
 }
