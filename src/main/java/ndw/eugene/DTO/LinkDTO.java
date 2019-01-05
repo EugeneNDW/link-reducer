@@ -1,15 +1,16 @@
-package ndw.eugene;
+package ndw.eugene.DTO;
 
 import ndw.eugene.model.Link;
 
 public class LinkDTO {
+
     private String link;
     private String original;
     private int rank;
     private int count;
 
-
     public LinkDTO(Link source) {
+
         this.link = source.getLink().getLink();
         this.original = source.getOriginal().getOriginal();
         this.rank = source.getRank();
