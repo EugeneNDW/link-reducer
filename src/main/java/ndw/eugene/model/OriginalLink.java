@@ -15,7 +15,7 @@ public class OriginalLink {
         return original;
     }
 
-    public void setOriginal(String originalLink) {
-        this.original = originalLink;
+    public void setOriginal(String original) {
+        this.original = original;
     }
 }
