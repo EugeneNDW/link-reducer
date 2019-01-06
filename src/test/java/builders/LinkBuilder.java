@@ -8,7 +8,7 @@ public class LinkBuilder {
 
     private Link link;
 
-    public static LinkBuilder link(String link){
+    public static LinkBuilder original(String link){
 
         return new LinkBuilder()
                 .originalLink(link)
@@ -17,7 +17,7 @@ public class LinkBuilder {
 
     }
 
-    public LinkBuilder originalLink(String originalLink){
+    private LinkBuilder originalLink(String originalLink){
 
         this.link = new Link();
         this.link.setOriginal(new OriginalLink(originalLink));
@@ -28,7 +28,7 @@ public class LinkBuilder {
 
     public LinkBuilder shortLink(String shortLink){
 
-        this.link.setLink(new ShortLink("/l",shortLink));
+        this.link.setLink(new ShortLink("/l/",shortLink));
 
         return this;
 
