@@ -11,7 +11,7 @@ public class LinkDTO {
 
     public LinkDTO(Link source) {
 
-        this.link = source.getLink().getLink();
+        this.link = source.getLink();
         this.original = source.getOriginal().getOriginal();
         this.rank = source.getRank();
         this.count = source.getStat().getCounter();

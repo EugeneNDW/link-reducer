@@ -2,6 +2,7 @@ package ndw.eugene.model;
 
 public class Link {
 
+    private String prefix;
     private ShortLink link;
     private OriginalLink original;
     private Statistics stat;
@@ -11,8 +12,20 @@ public class Link {
         this.stat = new Statistics();
     }
 
-    public ShortLink getLink() {
-        return link;
+    public String getLink() {
+        return prefix+link;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getShortLink(){
+        return link.getLink();
     }
 
     public void setLink(ShortLink link) {
