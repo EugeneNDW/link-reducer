@@ -1,8 +1,6 @@
 package ndw.eugene.repository;
 
 import ndw.eugene.model.Link;
-import ndw.eugene.model.OriginalLink;
-import ndw.eugene.model.ShortLink;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -17,21 +15,16 @@ public class CollectionStore implements Store {
     }
 
     @Override
-    public void saveLink(ShortLink link, OriginalLink original){
-        //todo переписать на приём целой модели
-        Link l = new Link();
-        l.setOriginal(original);
-        l.setLink(link);
-        store.put(link.getLinkWithoutPrefix(), l);
+    public void saveLink(Link l){
+        store.put(l.getShortLink(), l);
 
     }
 
-    //todo найти все места вызова (для теста этих мест)
     @Override
     public Link getLink(String identifier){
         Link result = store.get(identifier);
         if(result==null){
-            throw new LinkNotFoundException("there is no link in the store");
+            throw new LinkNotFoundException("there is no link with such id in the store");
         }
         return result;
     }
