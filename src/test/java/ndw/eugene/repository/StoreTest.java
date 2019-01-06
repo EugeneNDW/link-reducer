@@ -37,8 +37,10 @@ class StoreTest {
 
         Throwable exception = assertThrows(LinkNotFoundException.class,()->{store.getLink(idNotInTheStore);});
 
-        assertEquals("there is no such link in the store", exception.getMessage());
+        assertEquals("there is no link with such id in the store", exception.getMessage());
 
     }
+
+    //todo возможно тест сейв линка, рефактор
 
 }

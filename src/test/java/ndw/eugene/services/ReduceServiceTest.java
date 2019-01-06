@@ -138,4 +138,5 @@ class ReduceServiceTest {
         when(store.getLink(link.getShortLink())).thenReturn(link);
     }
 
+    //todo рефактор, если хватит времени
 }

@@ -2,6 +2,7 @@ package ndw.eugene.services;
 
 import builders.LinkBuilder;
 import ndw.eugene.model.Link;
+import ndw.eugene.repository.LinkNotFoundException;
 import ndw.eugene.repository.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,14 +21,14 @@ class StatisticsServiceTest {
 
     @BeforeEach
     void init(){
-     this.store = createLinkStoreMock();
+     this.store = createStoreMock();
      this.statisticsService = new StatisticsService(store);
     }
 
     @Test
-    void getSingleRecord_existsInStore(){
+    void getStatById_linkInStore(){
 
-        Link linkForTest = LinkBuilder.link("http://test.com").build();
+        Link linkForTest = LinkBuilder.original("http://test.com").build();
 
         List<Link> linksToStore = new ArrayList<>();
         linksToStore.add(linkForTest);
@@ -35,25 +36,23 @@ class StatisticsServiceTest {
         addLinkToStore(linkForTest);
         addListOfLinksToStore(linksToStore);
 
-        Link result = statisticsService.getStatById(linkForTest.getLink().getLinkWithoutPrefix());
+        Link result = statisticsService.getStatById(linkForTest.getShortLink());
 
         assertEquals("http://test.com", result.getOriginal().getOriginal());
     }
 
     @Test
-    void getSingleRecord_doesNotExistInStore(){
+    void getStatById_linkNotInStore(){
 
-        List<Link> linksToStore = new ArrayList<>();
-        addListOfLinksToStore(linksToStore);
+        initEmptyStore();
 
-        Link recordWithIdNotInTheStore = statisticsService.getStatById("id not in the store");
+        assertThrows(LinkNotFoundException.class,
+                        ()->{statisticsService.getStatById("stat");});
 
-        assertNull(recordWithIdNotInTheStore);
+        verify(store).getLink(anyString());
+
     }
 
-    //тест метода, где мы получаем страницу
-    // кейс получение обычной страницы записей
-    // кейс получение страницы -> изменение просмотров -> получение страницы с переставленными записями
     @Test
     void getPage_defaultValues(){
 
@@ -104,11 +103,6 @@ class StatisticsServiceTest {
     }
 
     @Test
-    void getPage_afterRecordsPositionChanged(){
-
-    }
-
-    @Test
     void getPage_moreThanHundredRecordsOnPage(){
 
         int moreThanHundred = 150;
@@ -118,14 +112,42 @@ class StatisticsServiceTest {
         List<Link> maxSizePage = statisticsService.getAll(1,moreThanHundred);
 
         assertEquals(100,maxSizePage.size());
+
+    }
+    @Test
+    void countRedirect_linkInStore(){
+        int numberOfViews = 0;
+        String shortLink = "exam";
+        Link linkInStore = LinkBuilder.original("http://example.com").shortLink(shortLink).views(numberOfViews).build();
+        addLinkToStore(linkInStore);
+
+        statisticsService.countRedirect(shortLink);
+
+        assertEquals(numberOfViews+1, linkInStore.getViews());
     }
 
-    private Store createLinkStoreMock(){
+    @Test
+    void countRedirect_linkNotInStore(){
+
+        initEmptyStore();
+
+        assertThrows(LinkNotFoundException.class,()->{ statisticsService.countRedirect("any-link");});
+        verify(store).getLink("any-link");
+    }
+
+
+    private Store createStoreMock(){
         return mock(Store.class);
     }
 
     private void addLinkToStore(Link link){
-        when(store.getLink(link.getLink().getLinkWithoutPrefix())).thenReturn(link);
+        when(store.getLink(link.getShortLink())).thenReturn(link);
+    }
+
+    private void initEmptyStore(){
+        List<Link> linksInTheStore = new ArrayList<>();
+        addListOfLinksToStore(linksInTheStore);
+        when(store.getLink(anyString())).thenThrow(LinkNotFoundException.class);
     }
 
     private void addListOfLinksToStore(List<Link> linkList){
@@ -137,12 +159,11 @@ class StatisticsServiceTest {
         List<Link> dataSet = new ArrayList<>();
 
         for(int i=0; i<numberOfLinks; i++){
-            Link l = LinkBuilder.link("http://example.com/"+i).shortLink("ex"+i).views(i).build();
+            Link l = LinkBuilder.original("http://example.com/"+i).shortLink("ex"+i).views(i).build();
             dataSet.add(l);
         }
 
         return dataSet;
     }
 
-    //todo тесты для учёта статистики
 }

@@ -4,6 +4,7 @@ import builders.LinkBuilder;
 import ndw.eugene.model.Link;
 import ndw.eugene.model.OriginalLink;
 import ndw.eugene.model.ShortLink;
+import ndw.eugene.repository.LinkNotFoundException;
 import ndw.eugene.repository.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,18 +23,21 @@ class LinkServiceTest {
     void init(){
 
         this.reduceService = createReduceServiceMock();
-        this.store = createLinkStoreMock() ;
+        this.store = createStoreMock() ;
         this.service = new LinkService(reduceService, store);
 
     }
     @Test
     void generateShortLink(){
 
-        OriginalLink originalLink = create("http://example.com");
+        Link link = LinkBuilder.original("http://example.com").build();
+        OriginalLink originalLink = link.getOriginal();
+        ShortLink shortLink = service.generateShortLink(originalLink, "/l/");
+        link.setLink(shortLink);
 
-        ShortLink shortLink = service.generateShortLink(originalLink);
+        //todo добавить equals в Link
 
-        verify(store).saveLink(shortLink, originalLink);
+        verify(store).saveLink(link);
         verify(reduceService).reduce(originalLink.getOriginal());
 
     }
@@ -41,13 +45,12 @@ class LinkServiceTest {
     @Test
     void getLinkToRedirect_linkInTheStore(){
 
-        Link linkToStore = LinkBuilder.link("long").shortLink("short").rank(1).views(100500).build();
+        Link linkToStore = LinkBuilder.original("long").shortLink("short").rank(1).views(100500).build();
         addLinkToStore(linkToStore);
 
-        Link linkFromStore = store.getLink("short");
+        service.getLinkForRedirect("short");
 
-        assertEquals(linkToStore, linkFromStore);
-        //todo заменить на поведение
+        verify(store).getLink("short");
     }
 
     private ReduceService createReduceServiceMock(){
@@ -59,16 +62,12 @@ class LinkServiceTest {
 
     }
 
-    private Store createLinkStoreMock(){
+    private Store createStoreMock(){
         return mock(Store.class);
     }
 
-    private OriginalLink create(String original){
-        return new OriginalLink(original);
-    }
-
     private void addLinkToStore(Link link){
-        when(store.getLink(link.getLink().getLinkWithoutPrefix())).thenReturn(link);
+        when(store.getLink(link.getShortLink())).thenReturn(link);
     }
 
 }
