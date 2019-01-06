@@ -28,7 +28,7 @@ public class LinkBuilder {
 
     public LinkBuilder shortLink(String shortLink){
 
-        this.link.setLink(new ShortLink("/l/",shortLink));
+        this.link.setLink(new ShortLink(shortLink));
 
         return this;
 
