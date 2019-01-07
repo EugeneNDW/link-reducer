@@ -16,4 +16,9 @@ public class ControllersExceptionHandler extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(new ExceptionDTO(HttpStatus.BAD_REQUEST.value(),e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ExceptionDTO> handleIllegalArgumentException(IllegalArgumentException e){
+        return new ResponseEntity<>(new ExceptionDTO(HttpStatus.BAD_REQUEST.value(), e.getMessage()),HttpStatus.BAD_REQUEST);
+    }
+
 }
