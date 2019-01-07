@@ -27,8 +27,9 @@ class StatisticsServiceTest {
 
     @Test
     void getStatById_linkInStore(){
-
-        Link linkForTest = LinkBuilder.original("http://test.com").build();
+        String originalForTestLink = "http://example.com";
+        String identifier = "FCcn";
+        Link linkForTest = LinkBuilder.original(originalForTestLink).identifier(identifier).build();
 
         List<Link> linksToStore = new ArrayList<>();
         linksToStore.add(linkForTest);
@@ -36,26 +37,23 @@ class StatisticsServiceTest {
         addLinkToStore(linkForTest);
         addListOfLinksToStore(linksToStore);
 
-        Link result = statisticsService.getStatById(linkForTest.getShortLink());
+        Link result = statisticsService.getStatById(linkForTest.getIdentifier());
 
-        assertEquals("http://test.com", result.getOriginal().getOriginal());
+        assertEquals(originalForTestLink, result.getOriginal());
     }
 
     @Test
     void getStatById_linkNotInStore(){
-
         initEmptyStore();
 
         assertThrows(LinkNotFoundException.class,
                         ()->{statisticsService.getStatById("stat");});
 
         verify(store).getLink(anyString());
-
     }
 
     @Test
     void getPage_defaultValues(){
-
         int defaultPage = 1;
         int defaultCount = 100;
         int moreThanHundred = 150;
@@ -70,9 +68,7 @@ class StatisticsServiceTest {
 
     @Test
     void getPage_emptyStore(){
-
-        List<Link> linksToStore = new ArrayList<>();
-        addListOfLinksToStore(linksToStore);
+        initEmptyStore();
 
         List pageFromEmptyStore = statisticsService.getAll(1,5);
 
@@ -81,7 +77,6 @@ class StatisticsServiceTest {
 
     @Test
     void getPage_startsOutOfBound(){
-
         List<Link> linksToStore = createListWithNLinks(10);
         addListOfLinksToStore(linksToStore);
 
@@ -92,7 +87,6 @@ class StatisticsServiceTest {
 
     @Test
     void getPage_endsOutOfBound(){
-
         List<Link> linksToStore = createListWithNLinks(10);
         addListOfLinksToStore(linksToStore);
 
@@ -104,7 +98,6 @@ class StatisticsServiceTest {
 
     @Test
     void getPage_moreThanHundredRecordsOnPage(){
-
         int moreThanHundred = 150;
         List<Link> linksToStore = createListWithNLinks(moreThanHundred);
         addListOfLinksToStore(linksToStore);
@@ -112,23 +105,23 @@ class StatisticsServiceTest {
         List<Link> maxSizePage = statisticsService.getAll(1,moreThanHundred);
 
         assertEquals(100,maxSizePage.size());
-
     }
+
     @Test
     void countRedirect_linkInStore(){
         int numberOfViews = 0;
-        String shortLink = "exam";
-        Link linkInStore = LinkBuilder.original("http://example.com").shortLink(shortLink).views(numberOfViews).build();
+        String identifier = "FCcn";
+        String originalLink = "http://example.com";
+        Link linkInStore = LinkBuilder.original(originalLink).identifier(identifier).views(numberOfViews).build();
         addLinkToStore(linkInStore);
 
-        statisticsService.countRedirect(shortLink);
+        statisticsService.countRedirect(identifier);
 
         assertEquals(numberOfViews+1, linkInStore.getViews());
     }
 
     @Test
     void countRedirect_linkNotInStore(){
-
         initEmptyStore();
 
         assertThrows(LinkNotFoundException.class,()->{ statisticsService.countRedirect("any-link");});
@@ -141,7 +134,7 @@ class StatisticsServiceTest {
     }
 
     private void addLinkToStore(Link link){
-        when(store.getLink(link.getShortLink())).thenReturn(link);
+        when(store.getLink(link.getIdentifier())).thenReturn(link);
     }
 
     private void initEmptyStore(){
@@ -155,15 +148,13 @@ class StatisticsServiceTest {
     }
 
     private List<Link> createListWithNLinks(int numberOfLinks){
-
         List<Link> dataSet = new ArrayList<>();
 
         for(int i=0; i<numberOfLinks; i++){
-            Link l = LinkBuilder.original("http://example.com/"+i).shortLink("ex"+i).views(i).build();
+            Link l = LinkBuilder.original("http://example.com/"+i).identifier("ex"+i).views(i).build();
             dataSet.add(l);
         }
 
         return dataSet;
     }
-
 }
