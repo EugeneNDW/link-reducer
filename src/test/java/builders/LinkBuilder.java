@@ -1,8 +1,6 @@
 package builders;
 
 import ndw.eugene.model.Link;
-import ndw.eugene.model.OriginalLink;
-import ndw.eugene.model.ShortLink;
 
 public class LinkBuilder {
 
@@ -12,48 +10,44 @@ public class LinkBuilder {
 
         return new LinkBuilder()
                 .originalLink(link)
-                .shortLink("defaultShort")
+                .identifier("defaultShort")
                 .rank(-1);
-
     }
 
-    private LinkBuilder originalLink(String originalLink){
-
-        this.link = new Link();
-        this.link.setOriginal(new OriginalLink(originalLink));
+    public LinkBuilder controllerPrefix(String controllerPrefix){
+        this.link.setPrefix(controllerPrefix);
 
         return this;
-
     }
 
-    public LinkBuilder shortLink(String shortLink){
-
-        this.link.setLink(new ShortLink(shortLink));
+    public LinkBuilder identifier(String identifier){
+        this.link.setIdentifier(identifier);
 
         return this;
-
     }
 
     public LinkBuilder rank(int rank){
-
         this.link.setRank(rank);
 
         return this;
-
     }
 
     public LinkBuilder views(int views){
-
         for (int i=0; i<views; i++){
             this.link.countRedirect();
         }
 
         return this;
-
     }
 
     public Link build(){
         return link;
     }
 
+    private LinkBuilder originalLink(String originalLink){
+        this.link = new Link();
+        this.link.setOriginal(originalLink);
+
+        return this;
+    }
 }
