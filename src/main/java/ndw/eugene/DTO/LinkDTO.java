@@ -10,12 +10,10 @@ public class LinkDTO {
     private int count;
 
     public LinkDTO(Link source) {
-
         this.link = source.getLink();
-        this.original = source.getOriginal().getOriginal();
+        this.original = source.getOriginal();
         this.rank = source.getRank();
         this.count = source.getStat().getCounter();
-
     }
 
     public String getLink() {
