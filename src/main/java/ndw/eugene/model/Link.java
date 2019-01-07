@@ -2,9 +2,9 @@ package ndw.eugene.model;
 
 public class Link {
 
+    private String identifier;
     private String prefix;
-    private ShortLink link;
-    private OriginalLink original;
+    private String original;
     private Statistics stat;
     private int rank;
 
@@ -13,30 +13,26 @@ public class Link {
     }
 
     public String getLink() {
-        return prefix+link;
-    }
-
-    public String getPrefix() {
-        return prefix;
+        return prefix+identifier;
     }
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
-    public String getShortLink(){
-        return link.getLink();
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setLink(ShortLink link) {
-        this.link = link;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
-    public OriginalLink getOriginal() {
+    public String getOriginal() {
         return original;
     }
 
-    public void setOriginal(OriginalLink original) {
+    public void setOriginal(String original) {
         this.original = original;
     }
 
@@ -57,8 +53,6 @@ public class Link {
     }
 
     public void countRedirect(){
-
         stat.increase();
-
     }
 }
