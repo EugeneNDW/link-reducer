@@ -1,7 +1,5 @@
 package ndw.eugene.DTO;
 
-import org.springframework.http.HttpStatus;
-
 public class ExceptionDTO {
     private int code;
     private String reason;
