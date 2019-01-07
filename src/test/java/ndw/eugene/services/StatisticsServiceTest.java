@@ -26,7 +26,7 @@ class StatisticsServiceTest {
     }
 
     @Test
-    void getStatById_linkInStore(){
+    void getStatisticsById_linkInStore(){
         String originalForTestLink = "http://example.com";
         String identifier = "FCcn";
         Link linkForTest = LinkBuilder.original(originalForTestLink).identifier(identifier).build();
@@ -37,17 +37,17 @@ class StatisticsServiceTest {
         addLinkToStore(linkForTest);
         addListOfLinksToStore(linksToStore);
 
-        Link result = statisticsService.getStatById(linkForTest.getIdentifier());
+        Link result = statisticsService.getStatisticsById(linkForTest.getIdentifier());
 
         assertEquals(originalForTestLink, result.getOriginal());
     }
 
     @Test
-    void getStatById_linkNotInStore(){
+    void getStatisticsById_linkNotInStore(){
         initEmptyStore();
 
         assertThrows(LinkNotFoundException.class,
-                        ()->{statisticsService.getStatById("stat");});
+                        ()->{statisticsService.getStatisticsById("stat");});
 
         verify(store).getLink(anyString());
     }
@@ -61,7 +61,7 @@ class StatisticsServiceTest {
         List<Link> linksToStore = createListWithNLinks(moreThanHundred);
         addListOfLinksToStore(linksToStore);
 
-        List<Link> defaultSizePage = statisticsService.getAll(defaultPage,defaultCount);
+        List<Link> defaultSizePage = statisticsService.getPage(defaultPage,defaultCount);
 
         assertEquals(100, defaultSizePage.size());
     }
@@ -70,7 +70,7 @@ class StatisticsServiceTest {
     void getPage_emptyStore(){
         initEmptyStore();
 
-        List pageFromEmptyStore = statisticsService.getAll(1,5);
+        List pageFromEmptyStore = statisticsService.getPage(1,5);
 
         assertTrue(pageFromEmptyStore.isEmpty());
     }
@@ -80,7 +80,7 @@ class StatisticsServiceTest {
         List<Link> linksToStore = createListWithNLinks(10);
         addListOfLinksToStore(linksToStore);
 
-        List pageOutOfBound = statisticsService.getAll(50,10);
+        List pageOutOfBound = statisticsService.getPage(50,10);
 
         assertTrue(pageOutOfBound.isEmpty());
     }
@@ -90,7 +90,7 @@ class StatisticsServiceTest {
         List<Link> linksToStore = createListWithNLinks(10);
         addListOfLinksToStore(linksToStore);
 
-        List linksOnLastPage = statisticsService.getAll(2,9);
+        List linksOnLastPage = statisticsService.getPage(2,9);
 
         assertEquals(1,linksOnLastPage.size());
         assertEquals(linksToStore.get(9),linksOnLastPage.get(0));
@@ -102,7 +102,7 @@ class StatisticsServiceTest {
         List<Link> linksToStore = createListWithNLinks(moreThanHundred);
         addListOfLinksToStore(linksToStore);
 
-        List<Link> maxSizePage = statisticsService.getAll(1,moreThanHundred);
+        List<Link> maxSizePage = statisticsService.getPage(1,moreThanHundred);
 
         assertEquals(100,maxSizePage.size());
     }

@@ -102,5 +102,4 @@ public class ReduceService {
 
         return res;
     }
-    //todo почистить код, если будет хвататьь времени
 }

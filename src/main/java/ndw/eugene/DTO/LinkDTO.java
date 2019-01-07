@@ -13,7 +13,7 @@ public class LinkDTO {
         this.link = source.getLink();
         this.original = source.getOriginal();
         this.rank = source.getRank();
-        this.count = source.getStat().getCounter();
+        this.count = source.getViews();
     }
 
     public String getLink() {

@@ -27,9 +27,9 @@ public class LinkController {
     @ResponseBody
     public ShortLinkDTO generateReducedLink(@RequestBody Link link){
         link.setPrefix(CONTROLLER_PREFIX);
-        linkService.generateShortLink(link); //todo непонятно что тут происходит, должно как-то разделяться
+        linkService.registerLinkInService(link);
 
-        return new ShortLinkDTO(link);
+        return toShortLinkDTO(link);
     }
 
     @GetMapping("/{shortLink}")
@@ -39,4 +39,7 @@ public class LinkController {
         return "redirect:" + linkService.getLinkForRedirect(shortLink);
     }
 
+    private ShortLinkDTO toShortLinkDTO(Link link){
+        return new ShortLinkDTO(link);
+    }
 }

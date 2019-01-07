@@ -19,7 +19,7 @@ public class StatisticsService {
         this.linkStore = store;
     }
 
-    public Link getStatById(String identifier){
+    public Link getStatisticsById(String identifier){
 
         List<Link> sortedListOfLinks = getSortedListOfLinks();
 
@@ -30,10 +30,9 @@ public class StatisticsService {
         l.setRank(rank+1);
 
         return l;
-
     }
 
-    public List<Link> getAll(int page, int count){
+    public List<Link> getPage(int page, int count){
         List<Link> sortedListOfLinks = getSortedListOfLinks();
         List<Link> currentPage = getPageContent(sortedListOfLinks, page, count);
 
@@ -99,10 +98,10 @@ public class StatisticsService {
     }
 
     private Comparator<Link> linkComparator = (l1, l2)->{
-        if(l1.getStat().getCounter()>l2.getStat().getCounter()){
+        if(l1.getViews()>l2.getViews()){
 
             return -1;
-        } else if(l1.getStat().getCounter()==l2.getStat().getCounter()){
+        } else if(l1.getViews()==l2.getViews()){
 
             return 0;
         }

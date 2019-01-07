@@ -28,7 +28,6 @@ public class CollectionStore implements Store {
         return result;
     }
 
-    //todo пусть сортировка будет здесь
     @Override
     public List<Link> getAllLinks(){
         return new ArrayList<>(store.values());

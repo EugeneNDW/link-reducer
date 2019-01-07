@@ -24,8 +24,7 @@ class LinkServiceTest {
     @Test
     void generateShortLink(){
         Link link = LinkBuilder.original("http://example.com").build();
-        String shortLink = linkService.generateShortLink(link);
-        link.setIdentifier(shortLink);
+        linkService.registerLinkInService(link);
 
         verify(store).saveLink(link);
         verify(reduceService).reduce(link.getOriginal());

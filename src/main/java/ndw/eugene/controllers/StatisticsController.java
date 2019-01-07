@@ -22,7 +22,7 @@ public class StatisticsController {
 
     @GetMapping("/{shortLink}")
     public LinkDTO getStatistics(@PathVariable("shortLink") String identifier){
-        Link result = statisticsService.getStatById(identifier);
+        Link result = statisticsService.getStatisticsById(identifier);
 
         return toLinkDTO(result);
     }
@@ -30,7 +30,7 @@ public class StatisticsController {
     @GetMapping("")
     public List<LinkDTO> getAllStatistics(@RequestParam(value = "page", defaultValue = "1")int page,
                                           @RequestParam(value = "count", defaultValue = "100")int count){
-        List<Link> result = statisticsService.getAll(page, count);
+        List<Link> result = statisticsService.getPage(page, count);
 
         return transformToListOfDTOs(result);
     }

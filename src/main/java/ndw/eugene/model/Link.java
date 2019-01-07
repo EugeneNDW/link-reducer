@@ -36,10 +36,6 @@ public class Link {
         this.original = original;
     }
 
-    public Statistics getStat() {
-        return stat;
-    }
-
     public int getRank() {
         return rank;
     }
@@ -49,10 +45,10 @@ public class Link {
     }
 
     public int getViews() {
-        return stat.getCounter();
+        return stat.getViewsCounter();
     }
 
     public void countRedirect(){
-        stat.increase();
+        stat.increaseViewCounter();
     }
 }
