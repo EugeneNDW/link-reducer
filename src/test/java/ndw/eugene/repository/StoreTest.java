@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StoreTest {
 
@@ -20,27 +19,22 @@ class StoreTest {
 
     @Test
     void getLink_linkInTheStore(){
-
-        Link linkToStore = LinkBuilder.original("http://example.com").shortLink("FCcn").build();
+        String originalLink = "http://example.com";
+        String identifier = "FCcn";
+        Link linkToStore = LinkBuilder.original(originalLink).identifier(identifier).build();
         store.saveLink(linkToStore);
 
-        Link linkFromStore = store.getLink(linkToStore.getShortLink());
+        Link linkFromStore = store.getLink(linkToStore.getIdentifier());
 
         assertEquals(linkToStore,linkFromStore);
-
     }
 
     @Test
     void getLink_linkNotInTheStore(){
-
         String idNotInTheStore = "link-not-in-the-store";
 
         Throwable exception = assertThrows(LinkNotFoundException.class,()->{store.getLink(idNotInTheStore);});
 
         assertEquals("there is no link with such id in the store", exception.getMessage());
-
     }
-
-    //todo возможно тест сейв линка, рефактор
-
 }
