@@ -11,7 +11,8 @@ import java.util.Set;
 public class ReduceService {
 
     private Store store;
-    private static final char[] ALPHABET_ARRAY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    private static final char[] ALPHABET = ("abcdefghijklmnopqrstuvwxyz" +
+                                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
 
     @Autowired
     public ReduceService(Store store) {
@@ -48,7 +49,7 @@ public class ReduceService {
         int[] dividedKey = decodeIdFromString(currentKey);
 
         for(int i = dividedKey.length-1; i >= 0; i--){
-            if(dividedKey[i]>=ALPHABET_ARRAY.length-1){
+            if(dividedKey[i]>= ALPHABET.length-1){
                 dividedKey[i]=0;
             } else {
                 dividedKey[i]++;
@@ -64,8 +65,8 @@ public class ReduceService {
 
         StringBuilder result = new StringBuilder();
         for(char ch:chars){
-            for(int i = 0; i< ALPHABET_ARRAY.length; i++){
-                if(ch== ALPHABET_ARRAY[i]){
+            for(int i = 0; i< ALPHABET.length; i++){
+                if(ch== ALPHABET[i]){
                     if(i<10){
                         result.append(0);
                     }
@@ -83,10 +84,10 @@ public class ReduceService {
         StringBuilder result = new StringBuilder();
 
         for(int a:dividedId){
-            if(a>= ALPHABET_ARRAY.length){
-                a = a% ALPHABET_ARRAY.length;
+            if(a>= ALPHABET.length){
+                a = a% ALPHABET.length;
             }
-            result.append(ALPHABET_ARRAY[a]);
+            result.append(ALPHABET[a]);
         }
 
         return result.toString();
