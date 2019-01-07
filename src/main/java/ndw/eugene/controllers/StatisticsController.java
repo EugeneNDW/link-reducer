@@ -21,12 +21,10 @@ public class StatisticsController {
     }
 
     @GetMapping("/{shortLink}")
-    public LinkDTO getStatistics(@PathVariable("shortLink") String link){
-
-        Link result = statisticsService.getStatById(link);
+    public LinkDTO getStatistics(@PathVariable("shortLink") String identifier){
+        Link result = statisticsService.getStatById(identifier);
 
         return toLinkDTO(result);
-
     }
 
     @GetMapping("")
@@ -35,25 +33,20 @@ public class StatisticsController {
         List<Link> result = statisticsService.getAll(page, count);
 
         return transformToListOfDTOs(result);
-
     }
 
     private List<LinkDTO> transformToListOfDTOs(List<Link> list){
-
         List<LinkDTO> result = new ArrayList<>();
         for(int i = 0; i<list.size();i++){
             result.add(new LinkDTO(list.get(i)));
         }
 
         return result;
-
     }
 
     private LinkDTO toLinkDTO(Link link){
-
         LinkDTO linkDTO = new LinkDTO(link);
 
         return linkDTO;
-
     }
 }

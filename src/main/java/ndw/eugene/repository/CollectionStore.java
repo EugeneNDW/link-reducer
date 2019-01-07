@@ -16,8 +16,7 @@ public class CollectionStore implements Store {
 
     @Override
     public void saveLink(Link l){
-        store.put(l.getShortLink(), l);
-
+        store.put(l.getIdentifier(), l);
     }
 
     @Override

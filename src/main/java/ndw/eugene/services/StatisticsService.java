@@ -19,11 +19,11 @@ public class StatisticsService {
         this.linkStore = store;
     }
 
-    public Link getStatById(String shortLink){
+    public Link getStatById(String identifier){
 
         List<Link> sortedListOfLinks = getSortedListOfLinks();
 
-        Link link = linkStore.getLink(shortLink);
+        Link link = linkStore.getLink(identifier);
 
         int rank = sortedListOfLinks.indexOf(link);
         Link l = sortedListOfLinks.get(rank);
@@ -34,24 +34,19 @@ public class StatisticsService {
     }
 
     public List<Link> getAll(int page, int count){
-
         List<Link> sortedListOfLinks = getSortedListOfLinks();
         List<Link> currentPage = getPageContent(sortedListOfLinks, page, count);
 
         return currentPage;
-
     }
 
-    public void countRedirect(String shortLink){
-
-        Link l = linkStore.getLink(shortLink);
+    public void countRedirect(String identifier){
+        Link l = linkStore.getLink(identifier);
         l.countRedirect();
-
     }
 
 
     private List<Link> getSortedListOfLinks(){
-
         List<Link> list = linkStore.getAllLinks();
         list.sort(linkComparator);
 
@@ -60,34 +55,27 @@ public class StatisticsService {
         }
 
         return list;
-
     }
 
     private List<Link> getPageContent(List<Link> list, int page, int count) {
-
         int validCount = getCountInsideBorders(count);
         int start = getStartPosition(page, validCount, list.size());
         int end = getEndPosition(page, validCount, list.size());
 
         return list.subList(start, end);
-
     }
 
     private int getStartPosition(int page, int count, int size){
-
         int probPosition = calculateStartPosition(page, count);
 
         return probPosition > size? size : probPosition;
-
     }
 
 
     private int getEndPosition(int page, int count, int size){
-
         int probPosition = calculateEndPosition(page, count);
 
         return probPosition > size? size : probPosition;
-
     }
 
     private int calculateStartPosition(int page, int count) {
@@ -99,7 +87,6 @@ public class StatisticsService {
     }
 
     private int getCountInsideBorders(int count){
-
         if (count<1){
             return 1;
         }
@@ -113,10 +100,13 @@ public class StatisticsService {
 
     private Comparator<Link> linkComparator = (l1, l2)->{
         if(l1.getStat().getCounter()>l2.getStat().getCounter()){
+
             return -1;
         } else if(l1.getStat().getCounter()==l2.getStat().getCounter()){
+
             return 0;
         }
+
         return 1;
     };
 }

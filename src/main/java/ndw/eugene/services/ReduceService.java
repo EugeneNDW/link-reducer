@@ -11,10 +11,7 @@ import java.util.Set;
 public class ReduceService {
 
     private Store store;
-    private static final String ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static final char[] ALPHABET_ARRAY = ALPHABET.toCharArray();
-        //todo решение коллизий при помощи метода открытой адресации?(поиск следующего свободного ключа) https://ru.wikipedia.org/wiki/Хеш-таблица#Открытая_адресация
-        //todo тесты11
+    private static final char[] ALPHABET_ARRAY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     @Autowired
     public ReduceService(Store store) {
@@ -22,33 +19,29 @@ public class ReduceService {
     }
 
     public String reduce(String original){
+        String key = generateId(original);
 
-        return generateId(original);
-
-    }
-
-
-    private String generateId(String original){
-
-        int hash = Math.abs(original.hashCode());
-        int[] dividedId = divideId(hash);
-        String key = encodeIdToString(dividedId);
         Set<String> keyStore = store.getKeys();
 
         while(keyStore.contains(key)){
-
             Link linkFromStore = store.getLink(key);
-
-            if (linkFromStore.getOriginal().getOriginal().equals(original)) {
+            if (linkFromStore.getOriginal().equals(original)) {
                 return key;
             } else {
                 key = getNextKey(key);
             }
-
         }
 
         return key;
+    }
 
+
+    private String generateId(String original){
+        int hash = Math.abs(original.hashCode());
+        int[] dividedId = divideId(hash);
+        String key = encodeIdToString(dividedId);
+
+        return key;
     }
 
     private String getNextKey(String currentKey){
@@ -67,7 +60,6 @@ public class ReduceService {
     }
 
     private int[] decodeIdFromString(String key){
-
         char[] chars = key.toCharArray();
 
         StringBuilder result = new StringBuilder();
@@ -85,28 +77,22 @@ public class ReduceService {
         int k = Integer.parseInt(result.toString());
 
         return divideId(k);
-
     }
 
     private String encodeIdToString(int[] dividedId){
-
         StringBuilder result = new StringBuilder();
 
         for(int a:dividedId){
-
             if(a>= ALPHABET_ARRAY.length){
                 a = a% ALPHABET_ARRAY.length;
             }
-
             result.append(ALPHABET_ARRAY[a]);
         }
 
         return result.toString();
-
     }
 
     private int[] divideId(int key){
-
         int[] res = new int[4];
 
         res[3] = key%100;
@@ -115,6 +101,6 @@ public class ReduceService {
         res[0] = (key/1000000)%100;
 
         return res;
-
     }
+    //todo почистить код, если будет хвататьь времени
 }

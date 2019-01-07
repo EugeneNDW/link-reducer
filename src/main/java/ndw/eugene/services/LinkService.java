@@ -1,43 +1,55 @@
 package ndw.eugene.services;
 
 import ndw.eugene.model.Link;
-import ndw.eugene.model.OriginalLink;
-import ndw.eugene.model.ShortLink;
-import ndw.eugene.repository.LinkStore;
+import ndw.eugene.repository.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LinkService {
 
-    private static final String LINK_CONTROLLER_PREFIX = "/l/";
-
-    private ReduceService rs;
-    private LinkStore store;
+    private ReduceService reduceService;
+    private Store store;
 
     @Autowired
-    public LinkService(ReduceService reduceService, LinkStore linkStore) {
-        this.rs = reduceService;
+    public LinkService(ReduceService reduceService, Store linkStore) {
+
+        this.reduceService = reduceService;
         this.store = linkStore;
+
     }
 
-    public ShortLink addLinkToStore(OriginalLink original){
+    public String generateShortLink(Link original){
+        //todo реализовать валидацию
+        linkRedirectValidation(original.getOriginal());
 
-        Link link = new Link();
-        link.setOriginal(original);
+        String key = reduceService.reduce(original.getOriginal());
+        original.setIdentifier(key);
+        store.saveLink(original);
 
-        String key = rs.reduce(original.getOriginal());
-        ShortLink sl = new ShortLink(LINK_CONTROLLER_PREFIX + key);
-        link.setLink(sl);
+        return original.getLink();
 
-        store.saveLink(key, link);
-
-        return link.getLink();
     }
 
-    public OriginalLink getRawLinkByShort(String shortLink){
-        Link l = store.getLink(shortLink);
-        l.countRedirect();
+    public String getLinkForRedirect(String identifier){
+
+        Link l = store.getLink(identifier);
+
         return l.getOriginal();
+
+    }
+
+    private void linkRedirectValidation(String originalLink){
+
+        if(!isRedirectable(originalLink)){
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    private boolean isRedirectable(String originalLink){
+
+        return true;
+        //todo найти проверку линка на переходимость(RegExp или Попытка перехода) https://stackoverflow.com/questions/161738/what-is-the-best-regular-expression-to-check-if-a-string-is-a-valid-url
     }
 }
