@@ -22,107 +22,87 @@ class ReduceServiceTest {
 
     @BeforeEach
     void setUp() {
-
         this.store = createStoreMock();
         this.reduceService = new ReduceService(store);
-
     }
 
-    //кейсы для метода generate
-    //ссылка, которой нет в хранилище -> оригинальный ключ
     @Test
     void generate_linkNotInTheStore(){
-        //init
         String original = "http://example.com";
         String expectedKey = "FCcn";
-        Link link = LinkBuilder.original(original).shortLink(expectedKey).build();
+        Link link = LinkBuilder.original(original).identifier(expectedKey).build();
 
         Set<String> keys = new HashSet<>();
         addKeysToStore(keys);
 
-        //execute
-        String actualKey = reduceService.reduce(link.getOriginal().getOriginal());
+        String actualKey = reduceService.reduce(link.getOriginal());
 
-        //verify
         assertEquals(expectedKey,actualKey);
-
     }
 
-    //ссылка, которая есть в хранилище ->ключ с которым ссылка уже записана
     @Test
     void generate_linkAlreadyInTheStore(){
-        //init
         String original = "http://example.com";
-        String expectedKey = "FCcn"; //ключ посчитан вручную из хэша
+        String expectedKey = "FCcn";
 
-        Link link = LinkBuilder.original(original).shortLink(expectedKey).build();
+        Link link = LinkBuilder.original(original).identifier(expectedKey).build();
 
         Set<String> keys = new HashSet<>();
         keys.add(expectedKey);
         addKeysToStore(keys);
         addLinkToStore(link);
 
-        //execute
-        String actualKey = reduceService.reduce(link.getOriginal().getOriginal());
+        String actualKey = reduceService.reduce(link.getOriginal());
 
-        //verify
         verify(store).getLink(expectedKey);
         assertEquals(expectedKey, actualKey);
     }
 
-    //ссылка, которой нет в хранилище, но она вызывает коллизию -> ключ с помощью открытой адресации
     @Test
     void generate_collision_linkNotInTheStore(){
-        //init
         String original = "http://example.com";
-        String keyForOrignal = "FCcn";
+        String keyForOriginal = "FCcn";
         String expectedKey = "FCco";
 
         Set<String> keys = new HashSet<>();
-        keys.add(keyForOrignal);
+        keys.add(keyForOriginal);
         addKeysToStore(keys);
 
-        Link collisionLink = LinkBuilder.original("http://notexample.com").shortLink(keyForOrignal).build();
+        Link collisionLink = LinkBuilder.original("http://notexample.com").identifier(keyForOriginal).build();
         addLinkToStore(collisionLink);
 
-        //execute
         String actualKey = reduceService.reduce(original);
 
-        //verify
         assertEquals(expectedKey,actualKey);
     }
 
-    //ссылка, которая есть в хранилище, но лежит по другому адресу ->доступ по ключу с открытой адресацией
     @Test
     void generate_collision_linkAlreadyInTheStore(){
-        //init
         String original = "http://example.com";
-        String keyForOrignal = "FCcn";
+        String keyForOriginal = "FCcn";
         String nextKey = "FCco";
         String anotherNextKey = "FCcp";
         String expectedKey = "FCcq";
 
         Set<String> keys = new HashSet<>();
-        keys.add(keyForOrignal);
+        keys.add(keyForOriginal);
         keys.add(nextKey);
         keys.add(anotherNextKey);
         keys.add(expectedKey);
         addKeysToStore(keys);
 
-        Link collisionLink = LinkBuilder.original("http://notexample.com").shortLink(keyForOrignal).build();
-        Link nextAfterCollision = LinkBuilder.original("http://nextafter.ru").shortLink(nextKey).build();
-        Link nextAfterNext = LinkBuilder.original("http://nextafternext.org").shortLink(anotherNextKey).build();
-        Link testingLink = LinkBuilder.original(original).shortLink(expectedKey).build();
+        Link collisionLink = LinkBuilder.original("http://notexample.com").identifier(keyForOriginal).build();
+        Link nextAfterCollision = LinkBuilder.original("http://nextafter.ru").identifier(nextKey).build();
+        Link nextAfterNext = LinkBuilder.original("http://nextafternext.org").identifier(anotherNextKey).build();
+        Link testingLink = LinkBuilder.original(original).identifier(expectedKey).build();
 
         addLinkToStore(collisionLink);
         addLinkToStore(nextAfterCollision);
         addLinkToStore(nextAfterNext);
         addLinkToStore(testingLink);
 
-        //execute
         String actualKey = reduceService.reduce(original);
 
-        //verify
         assertEquals(expectedKey, actualKey);
     }
 
@@ -135,8 +115,6 @@ class ReduceServiceTest {
     }
 
     private void addLinkToStore(Link link){
-        when(store.getLink(link.getShortLink())).thenReturn(link);
+        when(store.getLink(link.getIdentifier())).thenReturn(link);
     }
-
-    //todo рефактор, если хватит времени
 }
