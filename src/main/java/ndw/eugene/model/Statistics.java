@@ -2,17 +2,17 @@ package ndw.eugene.model;
 
 public class Statistics {
 
-    private int viewsCounter;
+  private int viewsCounter;
 
-    public Statistics() {
-        viewsCounter = 0;
-    }
+  public Statistics() {
+    viewsCounter = 0;
+  }
 
-    public int getViewsCounter() {
-        return viewsCounter;
-    }
+  public int getViewsCounter() {
+    return viewsCounter;
+  }
 
-    public void increaseViewCounter(){
-        viewsCounter++;
-    }
+  public void increaseViewCounter() {
+    viewsCounter++;
+  }
 }
