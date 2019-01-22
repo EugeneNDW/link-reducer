@@ -56,6 +56,7 @@ public class StatisticsService {
   }
 
   private List<Link> getPageContent(List<Link> list, int page, int count) {
+    pageValidation(page);
     int validCount = getCountInsideBorders(count);
     int start = getStartPosition(page, validCount, list.size());
     int end = getEndPosition(page, validCount, list.size());
@@ -96,6 +97,12 @@ public class StatisticsService {
     }
 
     return count;
+  }
+
+  private void pageValidation(int page) {
+    if (page < 1) {
+      throw new IllegalArgumentException("page number cannot be less than 1");
+    }
   }
 
   private Comparator<Link> linkComparator = (l1, l2) -> {
