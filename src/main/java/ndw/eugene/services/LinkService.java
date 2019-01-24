@@ -11,30 +11,35 @@ import org.springframework.stereotype.Service;
 @Service
 public class LinkService {
 
+  private StatisticsService statisticsService;
   private ReduceService reduceService;
   private Store store;
   private Pattern validLink = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#"
           + "/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
   @Autowired
-  public LinkService(ReduceService reduceService, Store linkStore) {
+  public LinkService(ReduceService reduceService,
+                     Store linkStore, StatisticsService statisticsService) {
     this.reduceService = reduceService;
     this.store = linkStore;
+    this.statisticsService = statisticsService;
   }
 
-  public void registerLinkInService(Link original) {
+  public void registerLinkInService(Link original, String controllerPrefix) {
     checkNullLink(original);
     ifLinkInvalidThrowException(original);
 
+    original.setPrefix(controllerPrefix);
     String key = reduceService.reduce(original.getOriginal());
     original.setIdentifier(key);
     store.saveLink(original);
   }
 
   public String getLinkForRedirect(String identifier) {
-    Link l = store.getLink(identifier);
+    Link link = store.getLink(identifier); //todo тесты подсчёта статистики
+    statisticsService.countRedirect(identifier);
 
-    return l.getOriginal();
+    return link.getOriginal();
   }
 
   private boolean isMatch(Pattern p, String s) {
