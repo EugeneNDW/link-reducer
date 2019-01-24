@@ -23,6 +23,7 @@ public class LinkService {
   }
 
   public void registerLinkInService(Link original) {
+    checkNullLink(original);
     ifLinkInvalidThrowException(original);
 
     String key = reduceService.reduce(original.getOriginal());
@@ -44,6 +45,12 @@ public class LinkService {
   private void ifLinkInvalidThrowException(Link original) {
     if (!isMatch(validLink,original.getOriginal())) {
       throw new IllegalArgumentException("link:" + original.getOriginal() + " is invalid");
+    }
+  }
+
+  private void checkNullLink(Link link) {
+    if (link.getOriginal() == null) {
+      throw new IllegalArgumentException("invalid json format");
     }
   }
 }
