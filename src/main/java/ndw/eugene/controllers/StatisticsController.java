@@ -31,13 +31,14 @@ public class StatisticsController {
   }
 
   @GetMapping("")
-  public List<LinkDto> getAllStatistics(@RequestParam(value = "page", defaultValue = "1")int page,
-                                        @RequestParam(value = "count", defaultValue = "100")int count) {
+  public List<LinkDto> getAllStatistics(
+          @RequestParam(value = "page", defaultValue = "1")int page,
+          @RequestParam(value = "count", defaultValue = "100")int count) {
+
     List<Link> result = statisticsService.getPage(page, count);
 
     return transformToListOfDtos(result);
   }
-  //todo вынесение логики в контроллер
 
   private List<LinkDto> transformToListOfDtos(List<Link> list) {
     List<LinkDto> result = new ArrayList<>();
