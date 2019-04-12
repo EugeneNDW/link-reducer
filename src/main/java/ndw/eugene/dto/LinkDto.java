@@ -1,4 +1,4 @@
-package ndw.eugene.DTO;
+package ndw.eugene.dto;
 
 import ndw.eugene.model.Link;
 
