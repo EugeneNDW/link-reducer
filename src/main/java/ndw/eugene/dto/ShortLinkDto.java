@@ -1,19 +1,19 @@
-package ndw.eugene.dto;
+package ndw.eugene.DTO;
 
 import ndw.eugene.model.Link;
 
-public class ShortLinkDto {
-  private String link;
+public class ShortLinkDTO {
+    private String link;
 
-  public ShortLinkDto(Link link) {
-    this.link = link.getLink();
-  }
+    public ShortLinkDTO(Link link) {
+        this.link = link.getLink();
+    }
 
-  public String getLink() {
-    return link;
-  }
+    public String getLink() {
+        return link;
+    }
 
-  public void setLink(String link) {
-    this.link = link;
-  }
+    public void setLink(String link) {
+        this.link = link;
+    }
 }

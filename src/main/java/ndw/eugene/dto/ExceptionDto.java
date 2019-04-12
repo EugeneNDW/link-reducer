@@ -1,28 +1,30 @@
-package ndw.eugene.dto;
+package ndw.eugene.DTO;
 
-public class ExceptionDto {
-  private int code;
-  private String reason;
+public class ExceptionDTO {
+    private int code;
+    private String reason;
 
-  public ExceptionDto(int code, String reason) {
-    this.code = code;
-    this.reason = reason;
-  }
+    public ExceptionDTO(int code, String reason) {
 
-  public int getCode() {
-    return code;
-  }
+        this.code = code;
+        this.reason = reason;
 
-  public void setCode(int code) {
-    this.code = code;
-  }
+    }
 
-  public String getReason() {
-    return reason;
-  }
+    public int getCode() {
+        return code;
+    }
 
-  public void setReason(String reason) {
-    this.reason = reason;
-  }
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
 }
