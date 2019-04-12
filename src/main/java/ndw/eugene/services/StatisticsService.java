@@ -56,7 +56,7 @@ public class StatisticsService {
   }
 
   private List<Link> getPageContent(List<Link> list, int page, int count) {
-    pageValidation(page);
+    lessThanOneValidation(page);
     int validCount = getCountInsideBorders(count);
     int start = getStartPosition(page, validCount, list.size());
     int end = getEndPosition(page, validCount, list.size());
@@ -64,7 +64,7 @@ public class StatisticsService {
     return list.subList(start, end);
   }
 
-  //todo отсутствие обработки отрицательных значений для номера страницы
+
 
   private int getStartPosition(int page, int count, int size) {
     int probPosition = calculateStartPosition(page, count);
@@ -99,7 +99,7 @@ public class StatisticsService {
     return count;
   }
 
-  private void pageValidation(int page) {
+  private void lessThanOneValidation(int page) {
     if (page < 1) {
       throw new IllegalArgumentException("page number cannot be less than 1");
     }

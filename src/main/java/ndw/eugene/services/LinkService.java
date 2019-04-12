@@ -7,6 +7,7 @@ import ndw.eugene.model.Link;
 import ndw.eugene.repository.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LinkService {
@@ -36,7 +37,7 @@ public class LinkService {
   }
 
   public String getLinkForRedirect(String identifier) {
-    Link link = store.getLink(identifier); //todo тесты подсчёта статистики
+    Link link = store.getLink(identifier);
     statisticsService.countRedirect(identifier);
 
     return link.getOriginal();
